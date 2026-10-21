@@ -104,7 +104,9 @@ const downloads = computed(() => [
     <p>
       Wähle eine Vorderseite, passe die Rückseite mit deinem Text und der Adresse an und lade die Karte
       herunter. Alles läuft in deinem Browser, es wird nichts hochgeladen. Fragen, Feedback oder Ideen? Schreib mir auf Mastodon:
-      <a href="https://hachyderm.io/@sabrinkmann" rel="me">@sabrinkmann@hachyderm.io</a>
+      <a href="https://hachyderm.io/@sabrinkmann" rel="me">@sabrinkmann@hachyderm.io</a>. Die Postkarten-Vorlagen und die damit erzeugten Postkarten stehen unter
+      <a href="https://creativecommons.org/licenses/by-sa/4.0/deed.de" target="_blank" rel="license noopener">CC BY-SA 4.0</a>
+      (Namensnennung: postcards.fedw.eu).
     </p>
 
     <h2>1. Vorderseite wählen</h2>
@@ -185,13 +187,16 @@ const downloads = computed(() => [
       </div>
       <div class="footer-col">
         <a href="https://github.com/54GradSoftware/postcard-generator">GitHub (Software)</a> |
-        <a href="https://github.com/54GradSoftware/postcard-generator/blob/main/LICENSE">MIT-Lizenz</a>
+        <a href="https://github.com/54GradSoftware/postcard-generator/blob/main/LICENSE">MIT-Lizenz (Software)</a>
       </div>
       <div class="footer-col">
         <a href="https://www.54gradsoftware.de/impressum">Impressum</a> |
         <a href="https://www.54gradsoftware.de/datenschutz">Datenschutz</a>
       </div>
     </div>
+    <p class="footer-license">
+      Die Software steht unter MIT.
+    </p>
   </footer>
 </template>
 
@@ -214,6 +219,7 @@ label { display: block; margin-bottom: 0.25rem; }
 .footer-grid { display: grid; grid-template-columns: 1fr; gap: 1rem; max-width: 1200px; margin: 0 auto; text-align: center; }
 .footer-col a { color: inherit; text-decoration: none; }
 .footer-col a:hover { text-decoration: underline; }
+.footer-license { max-width: 1200px; margin: 1rem auto 0; text-align: center; }
 @media (min-width: 48rem) {
   .footer-grid { grid-template-columns: repeat(3, 1fr); }
 }
