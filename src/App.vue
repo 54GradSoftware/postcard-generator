@@ -103,7 +103,7 @@ const downloads = computed(() => [
     </p>
     <p>
       Wähle eine Vorderseite, passe die Rückseite mit deinem Text und der Adresse an und lade die Karte
-      herunter. Alles läuft in deinem Browser, es wird nichts hochgeladen. Fragen, Feedback oder Ideen? Schreib mir auf Mastodon:
+      herunter. Alles läuft in deinem Browser, es wird nichts hochgeladen. Fragen, Feedback oder Ideen? Schreib mir im Fediverse:
       <a href="https://hachyderm.io/@sabrinkmann" rel="me">@sabrinkmann@hachyderm.io</a>. Die Postkarten-Vorlagen und die damit erzeugten Postkarten stehen unter
       <a href="https://creativecommons.org/licenses/by-sa/4.0/deed.de" target="_blank" rel="license noopener">CC BY-SA 4.0</a>
       (Namensnennung: postcards.fedw.eu).
