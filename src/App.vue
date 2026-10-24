@@ -1,9 +1,10 @@
 <script setup>
-import { computed, reactive, ref, shallowRef, watchEffect } from 'vue'
+import { computed, reactive, ref, shallowRef, watch, watchEffect } from 'vue'
 import QRCode from 'qrcode'
 import Button from 'primevue/button'
 import Card from 'primevue/card'
 import InputText from 'primevue/inputtext'
+import RadioButton from 'primevue/radiobutton'
 import Textarea from 'primevue/textarea'
 import folgenSvg from './assets/vorderseite-folgen.svg?raw'
 import fediverseSvg from './assets/vorderseite-fediverse.svg?raw'
@@ -16,14 +17,13 @@ const fronts = [
 ]
 const front = shallowRef(fronts[0])
 
-const blocks = reactive([
-  { key: 'name', label: 'Name (nach "Hey")', value: '', x: 60, y: 31, size: 13, maxWidth: 125 },
-  { key: 'intro', label: 'Einleitung', value: 'wollt ihr nicht auch ins Fediverse?', x: 39, y: 50.5, size: 13, maxWidth: 180 },
-  { key: 'heading', label: 'Überschrift', value: 'Fediverse? Was ist das?', x: 34, y: 73, size: 14, maxWidth: 185 },
+// Vorlagen für Überschrift und Text der Rückseite
+const textVariants = [
   {
-    key: 'text',
-    label: 'Text',
-    value: [
+    id: 'technisch',
+    title: 'Das Fediverse technisch erklärt',
+    heading: 'Fediverse? Was ist das?',
+    text: [
       'Das Fediverse, zusammengesetzt',
       'aus "Federation" (föderiert) und',
       '"Universe" (Universum), ist ein',
@@ -35,6 +35,35 @@ const blocks = reactive([
       'Instanzen aber untereinander alle',
       'miteinander kommunizieren.',
     ].join('\n'),
+  },
+  {
+    id: 'vorteile',
+    title: 'Mastodon und das Fediverse – die Vorteile',
+    heading: 'Mastodon? Fediverse? Was ist das?',
+    text: [
+      'Mastodon und das Fediverse sind werbefreie,',
+      'dezentrale soziale Netzwerke – eine echte',
+      'Alternative zu den großen Konzernen. Hier',
+      'steht der Austausch im Vordergrund, nicht',
+      'der Profit.',
+      'Die Vorteile:',
+      '✓ Keine Werbung',
+      '✓ Chronologische Timeline (kein Algorithmus)',
+      '✓ Datenschutzfreundlich',
+      '✓ Kostenlos und Open Source',
+    ].join('\n'),
+  },
+]
+const textVariant = shallowRef(textVariants[0])
+
+const blocks = reactive([
+  { key: 'name', label: 'Name (nach "Hey")', value: '', x: 60, y: 31, size: 13, maxWidth: 125 },
+  { key: 'intro', label: 'Einleitung', value: 'wollt ihr nicht auch ins Fediverse?', x: 39, y: 50.5, size: 13, maxWidth: 180 },
+  { key: 'heading', label: 'Überschrift', value: textVariant.value.heading, x: 34, y: 73, size: 14, maxWidth: 185 },
+  {
+    key: 'text',
+    label: 'Text',
+    value: textVariant.value.text,
     rows: 10,
     x: 40,
     y: 90.5,
@@ -56,6 +85,15 @@ const blocks = reactive([
   },
 ])
 
+function block(key) {
+  return blocks.find((block) => block.key === key)
+}
+
+watch(textVariant, (variant) => {
+  block('heading').value = variant.heading
+  block('text').value = variant.text
+})
+
 function lines(block) {
   const all = block.value.split('\n')
   return block.lineYs ? all.slice(0, block.lineYs.length) : all
@@ -70,7 +108,7 @@ function fontSize(block) {
   return Math.min(block.size, block.maxWidth / (0.4 * longestLine))
 }
 
-const link = computed(() => blocks.find((block) => block.key === 'link'))
+const link = computed(() => block('link'))
 const qr = ref('')
 watchEffect(async () => {
   const url = 'https://' + link.value.value.replace(/^https?:\/\//, '')
@@ -127,6 +165,13 @@ const downloads = computed(() => [
     <h2>2. Rückseite anpassen</h2>
     <div class="row">
       <form @submit.prevent>
+        <fieldset>
+          <legend>Textvorlage (überschreibt Überschrift und Text)</legend>
+          <div v-for="variant in textVariants" :key="variant.id" class="radio">
+            <RadioButton v-model="textVariant" :inputId="`variant-${variant.id}`" name="textVariant" :value="variant" />
+            <label :for="`variant-${variant.id}`">{{ variant.title }}</label>
+          </div>
+        </fieldset>
         <p v-for="block in blocks" :key="block.key">
           <label :for="block.key">{{ block.label }}</label>
           <Textarea v-if="block.rows" :id="block.key" v-model="block.value" :rows="block.rows" fluid />
@@ -213,6 +258,9 @@ main { max-width: 64rem; margin: 0 auto; padding: 1rem; }
 .buttons { display: flex; flex-wrap: wrap; gap: 0.5rem; }
 a.p-button { text-decoration: none; }
 label { display: block; margin-bottom: 0.25rem; }
+fieldset { border: 1px solid #ccc; border-radius: 0.5rem; margin: 0; }
+.radio { display: flex; align-items: center; gap: 0.5rem; margin-block: 0.25rem; }
+.radio label { margin: 0; }
 
 /* Footer, übernommen vom Mastodon Account Checker */
 .layout-footer { margin-top: 2rem; padding: 1.5rem; background: var(--p-surface-100); border-top: 1px solid var(--p-surface-200); }
